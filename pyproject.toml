@@ -6,9 +6,12 @@ build-backend = "hatchling.build"
 name = "BlackWidows"
 version = "0.0.1"
 authors = [
-  { name='Nick Boardman', email="nfb@st-andrews.ac.uk"}
+  { name='Nick Boardman', email="nfb@st-andrews.ac.uk"},
+  { name='Roya Hamedani Golshan', email='rhgolshan@ph1.uni-koeln.de'},
+  { name='Bron Reichardt Chu', email='bronwyn.j.reichardtchu@durham.ac.uk' },
   { name="Yuankang Liu", email="yuankang.liu@gmail.com" },
-  { name="", email="tom.theuns@gmail.com" }
+  { name="Bjarki Bjorgvinsson", email="bjarki.bjorgvinsson@durham.ac.uk" },
+  { name="Kate Harborne", email="katherine.e.harborne@durham.ac.uk"}
 ]
 description = "Galaxy evolution, ISM & Chemistry"
 readme = "README.md"
