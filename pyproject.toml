@@ -1,0 +1,24 @@
+[build-system]
+requires = ["hatchling >= 1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "BlackWidows"
+version = "0.0.1"
+authors = [
+  { name='Nick Boardman', email="nfb@st-andrews.ac.uk"}
+  { name="Yuankang Liu", email="yuankang.liu@gmail.com" },
+  { name="", email="tom.theuns@gmail.com" }
+]
+description = "Galaxy evolution, ISM & Chemistry"
+readme = "README.md"
+requires-python = ">=3.9"
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = [
+    "LICENSE",
+]
