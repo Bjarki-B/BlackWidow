@@ -1,6 +1,6 @@
 Commits should be structured as:
 --------------------------------
-<KEYWORD> [Short Description]
+\<KEYWORD\> [Short Description]
 [Body (if required) with more information]
 
 [Footer (if required) explaining the issues fixed by the commit]
