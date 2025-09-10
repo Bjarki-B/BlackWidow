@@ -1,12 +1,9 @@
 import pytest
-from scaling_relations_Curti2020 import line_ratios
+from BlackWidowPipeline import scaling_relations_Curti2020 as Curti2020
 
-class TestLineRatios(unittest.TestCase):
-    def test_Z_zero(self):
-        metallicity = 8.69
-        results = line_ratios(metallicity)
-        
-        results = line_ratios(metallicity)
+def test_line_ratios_zero_metallicity():
+    metallicity = 0
+    results = Curti2020.line_ratios(metallicity)
 
     # 1. Check that the result is a dictionary
     assert isinstance(results, dict)
@@ -21,6 +18,7 @@ class TestLineRatios(unittest.TestCase):
     # 3. Check that all values are floats
     for val in results.values():
         assert isinstance(val, float)
+
 
 
 
