@@ -52,3 +52,12 @@ def test__calculate_ebv_from_halpha_hbeta_ratio__same_input_shape():
     Hbeta_map = np.array([[1, 2], [3, 4]])
     with pytest.raises(ValueError):
         calc_ext.calculate_ebv_from_halpha_hbeta_ratio(Halpha_map, Hbeta_map)
+
+def test__calculate_ebv_from_halpha_hbeta_ratio__correct_output_shape():
+    # test that the function returns an array with the same shape as the input 
+    # arrays
+    Halpha_map = np.array([[1, 2, 3], [4, 5, 6]])
+    Hbeta_map = np.array([[1, 2, 3], [4, 5, 6]])
+    ebv_map = calc_ext.calculate_ebv_from_halpha_hbeta_ratio(Halpha_map, Hbeta_map)
+    assert ebv_map.shape == Halpha_map.shape
+    assert ebv_map.shape == Hbeta_map.shape
