@@ -39,9 +39,13 @@ def calculate_ebv_from_halpha_hbeta_ratio(Halpha_map : np.ndarray, Hbeta_map : n
     # create an array full of small values to start with - this will be the
     # default value for pixels where the observed ratio is less than the
     # intrinsic ratio
-    ebv = np.full_like(Halpha_map, 0.01)
+    ebv = np.full_like(Halpha_map, 0.01, dtype=np.double)
 
-    ebv[halpha_hbeta_ratio_obs < intrinsic_halpha_hbeta_ratio] = (2.5*np.log10(halpha_hbeta_ratio_obs/intrinsic_halpha_hbeta_ratio)) / diff_ext
+    # only calculate ebv for the pixels where the observed ratio is greater than 
+    # or equal to the intrinsic ratio
+    ebv_mask = halpha_hbeta_ratio_obs >= intrinsic_halpha_hbeta_ratio
+
+    ebv[ebv_mask] = (2.5*np.log10(halpha_hbeta_ratio_obs[ebv_mask]/intrinsic_halpha_hbeta_ratio)) / diff_ext
 
     return ebv
 
