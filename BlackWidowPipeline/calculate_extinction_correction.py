@@ -26,4 +26,24 @@ def calculate_ebv_from_halpha_hbeta_ratio(Halpha_map : np.ndarray, Hbeta_map : n
     if Halpha_map.shape != Hbeta_map.shape:
         raise ValueError("Input arrays must have the same shape")
     
+    # Calculate the Halpha/Hbeta ratio observed
+    halpha_hbeta_ratio_obs = Halpha_map / Hbeta_map
+
+    # set the intrinsic ratio
+    intrinsic_halpha_hbeta_ratio = 2.86
+
+    # set the expected differential extinction [k(hgamma)-k(hbeta)]=0.465
+    diff_ext = 0.465
+
+    # for each pixel, calculate the ebv value
+    # create an array full of small values to start with - this will be the
+    # default value for pixels where the observed ratio is less than the
+    # intrinsic ratio
+    ebv = np.full_like(Halpha_map, 0.01)
+
+    ebv[halpha_hbeta_ratio_obs < intrinsic_halpha_hbeta_ratio] = (2.5*np.log10(halpha_hbeta_ratio_obs/intrinsic_halpha_hbeta_ratio)) / diff_ext
+
+    return ebv
+
+    
 
