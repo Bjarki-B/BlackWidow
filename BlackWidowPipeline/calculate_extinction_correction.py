@@ -30,7 +30,8 @@ def calculate_ebv_from_halpha_hbeta_ratio(Halpha_map : np.ndarray, Hbeta_map : n
     halpha_hbeta_ratio_obs = Halpha_map / Hbeta_map
 
     # set the intrinsic ratio
-    intrinsic_halpha_hbeta_ratio = 2.86
+    # from Calzetti 2001 PASP 113 we have L_Halpha/L_Hbeta = 2.87
+    intrinsic_halpha_hbeta_ratio = 2.87
 
     # set the expected differential extinction [k(hgamma)-k(hbeta)]=0.465
     diff_ext = 0.465
@@ -49,5 +50,13 @@ def calculate_ebv_from_halpha_hbeta_ratio(Halpha_map : np.ndarray, Hbeta_map : n
 
     return ebv
 
+def calculate_Alambda_from_ebv(ebv_map : np.ndarray, wavelength : float|np.ndarray) -> np.ndarray:
+    # check that the ebv_map is a numpy array
+    if not isinstance(ebv_map, np.ndarray):
+        raise TypeError("Input must be a numpy array")
     
-
+    # check that the wavelength is a float or a numpy array
+    if not isinstance(wavelength, (float, np.ndarray)):
+        raise TypeError("Wavelength must be a float or a numpy array")
+    
+    return None
