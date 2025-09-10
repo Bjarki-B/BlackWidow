@@ -86,3 +86,39 @@ def test__calculate_ebv_from_halpha_hbeta_ratio__ratio_greater_than_intrinsic():
     ebv_map = calc_ext.calculate_ebv_from_halpha_hbeta_ratio(Halpha_map, Hbeta_map)
     assert np.all(ebv_map > 0.0)
 
+def test__calculate_Alambda_from_ebv__ebv_input():
+    # test that the function raises an error when the input is not a numpy array
+    wavelength = 5000.0
+
+    with pytest.raises(TypeError):
+        calc_ext.calculate_Alambda_from_ebv("not a numpy array", wavelength)
+    with pytest.raises(TypeError):
+        calc_ext.calculate_Alambda_from_ebv(123, wavelength)
+    with pytest.raises(TypeError):
+        calc_ext.calculate_Alambda_from_ebv([1, 2, 3], wavelength)
+    with pytest.raises(TypeError):
+        calc_ext.calculate_Alambda_from_ebv((1, 2, 3), wavelength)
+    with pytest.raises(TypeError):
+        calc_ext.calculate_Alambda_from_ebv({1: 2, 3: 4}, wavelength)
+    with pytest.raises(TypeError):
+        calc_ext.calculate_Alambda_from_ebv(None, wavelength)
+    with pytest.raises(TypeError):
+        calc_ext.calculate_Alambda_from_ebv(True, wavelength)
+
+def test__calculate_Alambda_from_ebv__wavelength_input():
+    # test that the function raises an error when the input is not a float or 
+    # numpy array
+    ebv_map = np.array([[1, 2, 3], [4, 5, 6]])
+
+    with pytest.raises(TypeError):
+        calc_ext.calculate_Alambda_from_ebv(ebv_map, "not a float or numpy array")
+    with pytest.raises(TypeError):
+        calc_ext.calculate_Alambda_from_ebv(ebv_map, [1, 2, 3])
+    with pytest.raises(TypeError):
+        calc_ext.calculate_Alambda_from_ebv(ebv_map, (1, 2, 3))
+    with pytest.raises(TypeError):
+        calc_ext.calculate_Alambda_from_ebv(ebv_map, {1: 2, 3: 4})
+    with pytest.raises(TypeError):
+        calc_ext.calculate_Alambda_from_ebv(ebv_map, None)
+    with pytest.raises(TypeError):
+        calc_ext.calculate_Alambda_from_ebv(ebv_map, True)
