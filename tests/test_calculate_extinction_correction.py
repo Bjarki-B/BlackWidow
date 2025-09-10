@@ -61,3 +61,28 @@ def test__calculate_ebv_from_halpha_hbeta_ratio__correct_output_shape():
     ebv_map = calc_ext.calculate_ebv_from_halpha_hbeta_ratio(Halpha_map, Hbeta_map)
     assert ebv_map.shape == Halpha_map.shape
     assert ebv_map.shape == Hbeta_map.shape
+
+def test__calculate_ebv_from_halpha_hbeta_ratio__ratio_less_than_intrinsic():
+    # test that the function returns an array with values of 0.01 when the ratio
+    # of Halpha to Hbeta is less than the intrinsic ratio of 2.86
+    Halpha_map = np.array([[1, 1, 1], [1, 1, 1]])
+    Hbeta_map = np.array([[1, 1, 1], [1, 1, 1]])
+    ebv_map = calc_ext.calculate_ebv_from_halpha_hbeta_ratio(Halpha_map, Hbeta_map)
+    assert np.all(ebv_map == 0.0)
+
+def test__calculate_ebv_from_halpha_hbeta_ratio__ratio_equal_to_intrinsic():
+    # test that the function returns an array with values of 0.0 when the ratio
+    # of Halpha to Hbeta is equal to the intrinsic ratio of 2.86
+    Halpha_map = np.array([[2.86, 2.86, 2.86], [2.86, 2.86, 2.86]])
+    Hbeta_map = np.array([[1, 1, 1], [1, 1, 1]])
+    ebv_map = calc_ext.calculate_ebv_from_halpha_hbeta_ratio(Halpha_map, Hbeta_map)
+    assert np.all(ebv_map == 0.0)
+
+def test__calculate_ebv_from_halpha_hbeta_ratio__ratio_greater_than_intrinsic():
+    # test that the function returns an array with values greater than 0.0 when 
+    # the ratio of Halpha to Hbeta is greater than the intrinsic ratio of 2.86
+    Halpha_map = np.array([[5, 5, 5], [5, 5, 5]])
+    Hbeta_map = np.array([[1, 1, 1], [1, 1, 1]])
+    ebv_map = calc_ext.calculate_ebv_from_halpha_hbeta_ratio(Halpha_map, Hbeta_map)
+    assert np.all(ebv_map > 0.0)
+
