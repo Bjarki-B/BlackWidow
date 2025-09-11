@@ -20,7 +20,7 @@ coeffitients_dic = {
 
 #==================== define functions ====================
 
-def line_ratios(metallicity: float) -> Dict[str, float]:
+def line_ratios(metallicity: float) -> dict[str, float]:
     """
     Compute log(R) for all diagnostics given metallicity 12 + log(O/H).
     
@@ -28,9 +28,11 @@ def line_ratios(metallicity: float) -> Dict[str, float]:
     """
     x = metallicity - 8.69
     results = {}
-    for name, data in coeffitients.items():
+    for name, data in coeffitients_dic.items():   # <-- FIXED HERE
         coeffs = data["coeffs"]
         results[name] = np.polyval(list(reversed(coeffs)), x)
     return results
+
+
 
     
