@@ -24,7 +24,16 @@ def line_ratios(metallicity: float) -> dict[str, float]:
     """
     Compute log(R) for all diagnostics given metallicity 12 + log(O/H).
     
-    Returns a dict: {diagnostic: value}
+    Parameters
+    ----------
+    metallicity : float
+    	The value of 12 + log(O/H).
+    	
+    Returns
+    -------
+    dict
+    	Returns the line rations as a dictionary with the line ratio name as key and its value. 
+    	{diagnostic: value}
     """
     x = metallicity - 8.69
     results = {}
