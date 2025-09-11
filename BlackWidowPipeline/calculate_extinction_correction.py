@@ -58,6 +58,39 @@ def calculate_ebv_from_halpha_hbeta_ratio(Halpha_map : np.ndarray, Hbeta_map : n
     return ebv
 
 def calculate_Alambda_from_ebv(ebv_map : np.ndarray, wavelength : float|np.ndarray) -> np.ndarray:
+    """Calculates the A(lambda) map from the ebv map and a wavelength or array of
+    wavelengths, or a map of the same wavelength the same shape as the ebv map
+
+    Parameters
+    ----------
+    ebv_map : np.ndarray
+        The E(B-V) map
+    wavelength : float | np.ndarray
+        The wavelength(s) at which to calculate the extinction correction, in 
+        Angstroms. If a numpy array is provided, it must be either 1D or have 
+        the same spatial shape as the input maps but all the same value (if 2D),
+        or be a 3D array with the same spatial shape as the ebv_map.
+
+    Returns
+    -------
+    np.ndarray
+        The A(lambda) map(s) at the specified wavelength(s). If a single 
+        wavelength is provided, the output will have the same shape as the input
+        ebv_map. If an array of wavelengths is provided, the output will be a 3D
+        array with shape (n_wavelengths, height, width)
+
+    Raises
+    ------
+    TypeError
+        If the ebv_map is not a numpy array
+    TypeError
+        If the wavelength is not a float or a numpy array
+    ValueError
+        If the wavelength is a numpy array but does not have the correct shape
+    ValueError
+        If the wavelength is a 2D numpy array with the same shape as the ebv_map 
+        but does not have all the same value
+    """
     # check that the ebv_map is a numpy array
     if not isinstance(ebv_map, np.ndarray):
         raise TypeError("Input must be a numpy array")
