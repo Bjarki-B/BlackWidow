@@ -59,4 +59,38 @@ def calculate_Alambda_from_ebv(ebv_map : np.ndarray, wavelength : float|np.ndarr
     if not isinstance(wavelength, (float, np.ndarray)):
         raise TypeError("Wavelength must be a float or a numpy array")
     
-    return None
+    # check that if the wavelength is a numpy array, it has the same shape as the
+    # ebv_map but is all the same value, or is a 1D array, or is a 3D array with 
+    # the same shape as the ebv_map
+    if isinstance(wavelength, np.ndarray):
+        if wavelength.ndim == 1:
+            pass
+        elif wavelength.shape == ebv_map.shape:
+            # make sure all the values are the same
+            if not np.all(wavelength == wavelength.flat[0]):
+                raise ValueError("Wavelength array must be all the same value if it has the exact same shape as the ebv_map")
+            pass
+        elif wavelength.shape == (ebv_map.shape[0], ebv_map.shape[1], 1):
+            pass
+        else:
+            raise ValueError("Wavelength array must be 1D or have the same spatial shape as the ebv_map")
+    
+    
+    # define the constant (using MW expected curve)
+    Rv = 3.1
+
+    # use that to calculate Av
+    Av = ebv_map * Rv
+
+    # convert lamdas from Angstroms into micrometers
+    wavelength = wavelength/10000
+
+    #define the equations from the paper
+    y = wavelength**(-1) - 1.82
+    a_x = 1.0 + 0.17699*y - 0.50447*(y**2) - 0.02427*(y**3) + 0.72085*(y**4) + 0.01979*(y**5) - 0.77530*(y**6) + 0.32999*(y**7)
+    b_x = 1.41338*y + 2.28305*(y**2) + 1.07233*(y**3) - 5.38434*(y**4) - 0.62251*(y**5) + 5.30260*(y**6) - 2.09002*(y**7)
+
+    # find A(lambda)
+    Alambda = (a_x + b_x/Rv)*Av
+    
+    return Alambda
