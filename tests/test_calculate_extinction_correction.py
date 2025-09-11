@@ -159,3 +159,20 @@ def test__apply_extinction_correction__correct_output_shape():
     corrected_flux_map = calc_ext.apply_extinction_correction(flux_map, Alambda_map)
     assert corrected_flux_map.shape == flux_map.shape
     assert corrected_flux_map.shape == Alambda_map.shape
+
+def test__unapply_extinction_correction__input_shape():
+    # test that the function raises an error when the input arrays do not have 
+    # the same shape
+    flux_map = np.array([[1, 2, 3], [4, 5, 6]])
+    Alambda_map = np.array([[1, 2], [3, 4]])
+    with pytest.raises(ValueError):
+        calc_ext.unapply_extinction_correction(flux_map, Alambda_map)
+
+def test__unapply_extinction_correction__correct_output_shape():
+    # test that the function returns an array with the same shape as the input 
+    # flux_map
+    flux_map = np.array([[1, 2, 3], [4, 5, 6]])
+    Alambda_map = np.array([[1, 2, 3], [4, 5, 6]])
+    uncorrected_flux_map = calc_ext.unapply_extinction_correction(flux_map, Alambda_map)
+    assert uncorrected_flux_map.shape == flux_map.shape
+    assert uncorrected_flux_map.shape == Alambda_map.shape
