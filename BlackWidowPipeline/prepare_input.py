@@ -14,7 +14,7 @@ def flatten_input(path: str) -> dict:
             Dictionary with emission lines as keys and flattened arrays as values.
     '''
     data_dict = {"Halpha":None, "Hbeta":None, "OII":None, "NII":None} # Dictionary for holding arrays
-    err_dict = {"err_Halpha":None, "err_Hbeta":None, "err_OII":None, "err_OII":None} # Dictionary for holding error arrays
+    err_dict = {"err_Halpha":None, "err_Hbeta":None, "err_OII":None, "err_NII":None} # Dictionary for holding error arrays
     ext_dict = {}
     lines = list(data_dict.keys())
     errs = list(err_dict.keys())
@@ -66,3 +66,5 @@ def check_input(data = None):
     
 if __name__ == "__main__":
     final = check_input('~/Documents/astrodat/BlackWidow/example_manga_maps.fits')
+    
+    print(final[0],final[1])
