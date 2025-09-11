@@ -134,3 +134,34 @@ def calculate_Alambda_from_ebv(ebv_map : np.ndarray, wavelength : float|np.ndarr
     Alambda = (a_x + b_x/Rv)*Av
     
     return Alambda
+
+def calc_extinction_correction(Halpha_map : np.ndarray, Hbeta_map : np.ndarray, wavelength : float|np.ndarray) -> np.ndarray:
+    """Takes the Halpha and Hbeta maps and a wavelength (or array of wavelengths)
+    and calculates the extinction correction map(s) at that wavelength
+
+    Parameters
+    ----------
+    Halpha_map : np.ndarray
+        A numpy array of the Halpha fluxes
+    Hbeta_map : np.ndarray
+        A numpy array of the Hbeta fluxes, same shape as Halpha_map
+    wavelength : float or np.ndarray
+        The wavelength(s) at which to calculate the extinction correction, in 
+        Angstroms. If a numpy array is provided, it must be either 1D or have 
+        the same spatial shape as the input maps but all the same value.
+
+    Returns
+    -------
+    np.ndarray
+        The extinction correction map(s) at the specified wavelength(s). If a 
+        single wavelength is provided, the output will have the same shape as 
+        the input maps. If an array of wavelengths is provided, the output will 
+        be a 3D array with shape (n_wavelengths, height, width)
+    """
+    # first calculate the ebv map from the halpha and hbeta maps
+    ebv_map = calculate_ebv_from_halpha_hbeta_ratio(Halpha_map, Hbeta_map)
+
+    # then calculate the Alambda map from the ebv map and the wavelength
+    Alambda_map = calculate_Alambda_from_ebv(ebv_map, wavelength)
+
+    return Alambda_map
