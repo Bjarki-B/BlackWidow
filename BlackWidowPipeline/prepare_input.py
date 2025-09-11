@@ -3,15 +3,23 @@ from astropy.io import fits
 
 def flatten_input(path: str) -> dict:
     '''
-    Open a FITS file, flatten its data, and return the flattened array. 
+    Open a FITS file, flatten its data, and return the flattened array.
+    
+    Parameters
+    ----------
     path: str
         Path to the FITS file.
     ext_dict: dict
         Dictionary of emission lines and their corresponding extensions in the HDUList.
         
-    returns:
+    Returns:
+    ----------
         data_dict: dict
             Dictionary with emission lines as keys and flattened arrays as values.
+    
+    Raises:
+    ----------
+        FileNotFoundError: If the specified FITS file does not exist.
     '''
     data_dict = {"Halpha":None, "Hbeta":None, "OII":None, "NII":None} # Dictionary for holding arrays
     err_dict = {"err_Halpha":None, "err_Hbeta":None, "err_OII":None, "err_NII":None} # Dictionary for holding error arrays
@@ -46,12 +54,22 @@ def check_input(data = None):
     '''
     Check whether the input is a dictionary of numpy arrays or a path to a FITS file.
     If it's a dictionary, validate its contents. If it's a path, process the FITS file with flatten_input.
+    
+    Parameters:
+    ----------
     data: dict or str
         Either a dictionary with emission lines as keys and numpy arrays as values, or a path to a FITS file.
         The emission lines in dictionary must be 'Halpha', 'Hbeta', 'OII', and 'NII' (case sensitive).
-    returns:
+        
+    Returns:
+    ----------
         If input is a dictionary, returns the same dictionary after validation.
         If input is a FITS file path, returns a dictionary with flattened arrays.
+        
+    Raises:
+    ----------
+        ValueError: If the input is neither a dictionary nor a string, or if the dictionary
+                    does not contain the required keys or has non-numpy array values.
     '''
     if type(data) is dict:
         assert all(isinstance(v, np.ndarray) for v in data.values()), "All values in the dictionary must be numpy arrays."
