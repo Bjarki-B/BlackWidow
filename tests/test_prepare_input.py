@@ -21,14 +21,14 @@ def test__flatten_input():
     assert isinstance(flattened, np.ndarray) # Ensure output is an array
     assert np.array_equal(flattened, [1, 2, 3, 4, 5, 6, 7, 8, 9]) # Ensure correct flattening
     assert np.array_equal(data_dict['Hbeta'], [2, 4, 6, 8, 10, 12, 14, 16, 18])
-    assert np.array_equal(data_dict['OIII'], [3, 6, 9, 12, 15, 18, 21, 24, 27])
+    assert np.array_equal(data_dict['OII'], [3, 6, 9, 12, 15, 18, 21, 24, 27])
     assert np.array_equal(data_dict['NII'], [4, 8, 12, 16, 20, 24, 28, 32, 36])
     # Cleanup
     os.remove('tests/sample.fits')
     
 def test__check_input():
     
-    test_dict = {'Halpha': np.array([1,2,3]), 'Hbeta': np.array([4,5,6]), 'OIII': np.array([7,8,9]), 'NII': np.array([10,11,12])}
+    test_dict = {'Halpha': np.array([1,2,3]), 'Hbeta': np.array([4,5,6]), 'OII': np.array([7,8,9]), 'NII': np.array([10,11,12])}
     checked_dict = prepare_input.check_input(test_dict)
     assert checked_dict == test_dict
     
