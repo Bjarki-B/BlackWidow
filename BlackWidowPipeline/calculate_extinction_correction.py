@@ -57,7 +57,7 @@ def calculate_ebv_from_halpha_hbeta_ratio(Halpha_map : np.ndarray, Hbeta_map : n
 
     return ebv
 
-def calculate_Alambda_from_ebv(ebv_map : np.ndarray, wavelength : float|np.ndarray) -> np.ndarray:
+def calculate_Alambda_from_ebv(ebv_map : np.ndarray, wavelength : float) -> np.ndarray:
     """Calculates the A(lambda) map from the ebv map and a wavelength or array of
     wavelengths, or a map of the same wavelength the same shape as the ebv map
 
@@ -65,11 +65,9 @@ def calculate_Alambda_from_ebv(ebv_map : np.ndarray, wavelength : float|np.ndarr
     ----------
     ebv_map : np.ndarray
         The E(B-V) map
-    wavelength : float | np.ndarray
-        The wavelength(s) at which to calculate the extinction correction, in 
-        Angstroms. If a numpy array is provided, it must be either 1D or have 
-        the same spatial shape as the input maps but all the same value (if 2D),
-        or be a 3D array with the same spatial shape as the ebv_map.
+    wavelength : float
+        The wavelength at which to calculate the extinction correction, in 
+        Angstroms. 
 
     Returns
     -------
@@ -84,37 +82,15 @@ def calculate_Alambda_from_ebv(ebv_map : np.ndarray, wavelength : float|np.ndarr
     TypeError
         If the ebv_map is not a numpy array
     TypeError
-        If the wavelength is not a float or a numpy array
-    ValueError
-        If the wavelength is a numpy array but does not have the correct shape
-    ValueError
-        If the wavelength is a 2D numpy array with the same shape as the ebv_map 
-        but does not have all the same value
+        If the wavelength is not a float
     """
     # check that the ebv_map is a numpy array
     if not isinstance(ebv_map, np.ndarray):
         raise TypeError("Input must be a numpy array")
     
-    # check that the wavelength is a float or a numpy array
-    if not isinstance(wavelength, (float, np.ndarray)):
-        raise TypeError("Wavelength must be a float or a numpy array")
-    
-    # check that if the wavelength is a numpy array, it has the same shape as the
-    # ebv_map but is all the same value, or is a 1D array, or is a 3D array with 
-    # the same shape as the ebv_map
-    if isinstance(wavelength, np.ndarray):
-        if wavelength.ndim == 1:
-            pass
-        elif wavelength.shape == ebv_map.shape:
-            # make sure all the values are the same
-            if not np.all(wavelength == wavelength.flat[0]):
-                raise ValueError("Wavelength array must be all the same value if it has the exact same shape as the ebv_map")
-            pass
-        elif wavelength.shape == (ebv_map.shape[0], ebv_map.shape[1], 1):
-            pass
-        else:
-            raise ValueError("Wavelength array must be 1D or have the same spatial shape as the ebv_map")
-    
+    # check that the wavelength is a float
+    if not isinstance(wavelength, float):
+        raise TypeError("Wavelength must be a float")
     
     # define the constant (using MW expected curve)
     Rv = 3.1
