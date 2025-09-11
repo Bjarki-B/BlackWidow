@@ -15,6 +15,13 @@ def calculate_ebv_from_halpha_hbeta_ratio(Halpha_map : np.ndarray, Hbeta_map : n
     -------
     np.ndarray
         The extinction correction map, same shape as input maps
+
+    Raises
+    ------
+    TypeError
+        If either input is not a numpy array
+    ValueError
+        If the input arrays do not have the same shape
     """
     # Check that the input is a numpy array
     if not isinstance(Halpha_map, np.ndarray):
