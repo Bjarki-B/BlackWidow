@@ -141,3 +141,42 @@ def calc_extinction_correction(Halpha_map : np.ndarray, Hbeta_map : np.ndarray, 
     Alambda_map = calculate_Alambda_from_ebv(ebv_map, wavelength)
 
     return Alambda_map
+
+def apply_extinction_correction(flux_map : np.ndarray, Alambda_map : np.ndarray) -> np.ndarray:
+    """Applies the extinction correction to a flux map
+
+    Parameters
+    ----------
+    flux_map : np.ndarray
+        The flux map to be corrected
+    Alambda_map : np.ndarray
+        The A(lambda) map at the wavelength of interest. The input should have 
+        the same shape as the flux_map. 
+
+    Returns
+    -------
+    np.ndarray
+        The extinction-corrected flux map. The output will have the same shape 
+        as the input flux_map.
+
+    Raises
+    ------
+    TypeError
+        If either input is not a numpy array
+    ValueError
+        If the input arrays do not have compatible shapes
+    """
+    # Check that the input is a numpy array
+    if not isinstance(flux_map, np.ndarray):
+        raise TypeError("Input must be a numpy array")
+    if not isinstance(Alambda_map, np.ndarray):
+        raise TypeError("Input must be a numpy array")
+    
+    # Check that the input arrays have compatible shapes
+    if Alambda_map.shape != flux_map.shape:
+        raise ValueError("If Alambda_map is 2D, it must have the same shape as flux_map")
+
+    # Calculate the extinction-corrected flux map
+    corrected_flux_map = flux_map * 10**(0.4 * Alambda_map)
+
+    return corrected_flux_map
