@@ -180,3 +180,42 @@ def apply_extinction_correction(flux_map : np.ndarray, Alambda_map : np.ndarray)
     corrected_flux_map = flux_map * 10**(0.4 * Alambda_map)
 
     return corrected_flux_map
+
+def unapply_extinction_correction(corrected_flux_map : np.ndarray, Alambda_map : np.ndarray) -> np.ndarray:
+    """Reverses the extinction correction on a flux map
+
+    Parameters
+    ----------
+    corrected_flux_map : np.ndarray
+        The extinction-corrected flux map
+    Alambda_map : np.ndarray
+        The A(lambda) map at the wavelength of interest. The input should have 
+        the same shape as the flux_map. 
+
+    Returns
+    -------
+    np.ndarray
+        The uncorrected flux map. The output will have the same shape as the 
+        input corrected_flux_map.
+
+    Raises
+    ------
+    TypeError
+        If either input is not a numpy array
+    ValueError
+        If the input arrays do not have compatible shapes
+    """
+    # Check that the input is a numpy array
+    if not isinstance(corrected_flux_map, np.ndarray):
+        raise TypeError("Input must be a numpy array")
+    if not isinstance(Alambda_map, np.ndarray):
+        raise TypeError("Input must be a numpy array")
+    
+    # Check that the input arrays have compatible shapes
+    if Alambda_map.shape != corrected_flux_map.shape:
+        raise ValueError("Alambda_map must have the same shape as corrected_flux_map")
+
+    # Calculate the uncorrected flux map
+    flux_map = corrected_flux_map / 10**(-0.4 * Alambda_map)
+
+    return flux_map
