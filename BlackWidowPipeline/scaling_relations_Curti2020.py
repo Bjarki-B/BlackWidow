@@ -32,8 +32,8 @@ def line_ratios(metallicity: float) -> dict[str, float]:
     Returns
     -------
     dict
-    	Returns the line rations as a dictionary with the line ratio name as key and its value. 
-    	{diagnostic: value}
+    	Returns the line ratios as a dictionary with the line ratio 
+    	(dingastic) name as key and its value : {diagnostic: value}
     """
     x = metallicity - 8.69
     results = {}
