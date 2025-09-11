@@ -61,10 +61,3 @@ def check_input(data = None):
         return flatten_input(data)
     else:
         raise ValueError("Input must be either a dictionary of numpy arrays or a path to a FITS file.")
-    
-    
-    
-if __name__ == "__main__":
-    final = check_input('~/Documents/astrodat/BlackWidow/example_manga_maps.fits')
-    
-    print(final[0],final[1])
