@@ -106,12 +106,13 @@ def test__calculate_Alambda_from_ebv__ebv_input():
         calc_ext.calculate_Alambda_from_ebv(True, wavelength)
 
 def test__calculate_Alambda_from_ebv__wavelength_input():
-    # test that the function raises an error when the input is not a float or 
-    # numpy array
+    # test that the function raises an error when the input is not a float
     ebv_map = np.array([[1, 2, 3], [4, 5, 6]])
 
     with pytest.raises(TypeError):
         calc_ext.calculate_Alambda_from_ebv(ebv_map, "not a float or numpy array")
+    with pytest.raises(TypeError):
+        calc_ext.calculate_Alambda_from_ebv(ebv_map, np.array([[1, 2], [3, 4]]))
     with pytest.raises(TypeError):
         calc_ext.calculate_Alambda_from_ebv(ebv_map, [1, 2, 3])
     with pytest.raises(TypeError):
@@ -123,18 +124,6 @@ def test__calculate_Alambda_from_ebv__wavelength_input():
     with pytest.raises(TypeError):
         calc_ext.calculate_Alambda_from_ebv(ebv_map, True)
 
-def test__calculate_Alambda_from_ebv__wavelength_array_input():
-    # test that the wavelength is an array of shape (n) or the same spatial shape
-    # as the ebv_map but all the same value, or is a 3D array with the same shape
-    # as the ebv_map
-    ebv_map = np.array([[1, 2, 3], [4, 5, 6]])
-    wavelength = np.array([[5000, 6000, 7000], [8000, 9000, 10000]])
-    with pytest.raises(ValueError):
-        calc_ext.calculate_Alambda_from_ebv(ebv_map, wavelength)
-
-    with pytest.raises(ValueError):
-        calc_ext.calculate_Alambda_from_ebv(ebv_map, np.array([[5000, 6000], [7000, 8000]]))
-
 
 def test__calculate_Alambda_from_ebv__correct_output_shape():
     # test that the function returns an array with the same shape as the input 
@@ -143,3 +132,13 @@ def test__calculate_Alambda_from_ebv__correct_output_shape():
     wavelength = 5000.0
     Alambda_map = calc_ext.calculate_Alambda_from_ebv(ebv_map, wavelength)
     assert Alambda_map.shape == ebv_map.shape
+
+def test__calc_extinction_correction__array_output_shape():
+    # test that the function returns an array with shape as the input maps
+    Hbeta_map = np.array([[1, 2, 3], [4, 5, 6]])
+    Halpha_map = np.array([[3, 4, 5], [6, 7, 8]])
+    wavelength = 5000.0
+    Alambda_map = calc_ext.calc_extinction_correction(Halpha_map, Hbeta_map, wavelength)
+    assert Alambda_map.shape == Hbeta_map.shape
+    assert Alambda_map.shape == Halpha_map.shape
+    assert len(Alambda_map.shape) == 2
