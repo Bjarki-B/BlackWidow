@@ -46,3 +46,4 @@ def test__check_input():
     assert isinstance(checked_fits[0], dict)
     assert np.array_equal(checked_fits[0]['Halpha'], array.flatten())
     os.remove('tests/sample.fits')
+    
