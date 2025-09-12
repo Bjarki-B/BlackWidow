@@ -4,10 +4,19 @@ import emcee
 from BlackWidowPipeline import scaling_relations_Curti2020 as scalrel
 
 def uniform_log_metallicity_prior(metallicity):
+    """Calculate the uniform log prior for metallicity.
+
+    Parameters
+    ----------
+    metallicity : float
+        metallicity values (12 + log(O/H)).
+
+    Returns
+    -------
+    0.0 or -inf : float
+        log of the prior value, 0.0 if within bounds, -inf if outside bounds.
     """
-    Uniform prior on metallicity between -2.0 and 0.5.
-    """
-    if -1.0 < metallicity[0] < 1.0:
+    if -1.0 < metallicity < 1.0:
         return 0.0
     return -np.inf
 
