@@ -21,18 +21,18 @@ def uniform_log_metallicity_prior(metallicity):
     return -np.inf
 
 
-def log_likelihood_individual_line(metallicity, line_ratio_obs, line_ratio_err):
+def log_likelihood(metallicity, line_ratio_obs, line_ratio_err):
     """
     Simple Gaussian likelihood function for a given metallicity and observed 
-    line ratios with their uncertainties.
-
+    line ratios with their uncertainties. Assumes that the line ratios are in 
+    log space (i.e., log(R)).
     Parameters
     ----------
     metallicity : float
         The value of 12 + log(O/H).
     line_ratios_obs : dict
         Dictionary of observed line ratios. Keys must be consistent with those 
-        in scaling_relations_Curti2020.py
+        in scaling_relations_Curti2020.py. Line ratios should be in log space.
     line_ratios_err : dict
         Dictionary of uncertainties in the observed line ratios, same shape as 
         line_ratios_obs.
@@ -51,7 +51,7 @@ def log_likelihood_individual_line(metallicity, line_ratio_obs, line_ratio_err):
             raise ValueError(f"Key {key} not found in line ratio error dictionary.")
         
         # calculate the log-likelihood for each line ratio
-        log_prob = ((line_ratio_obs[key] - line_ratios_model[key]) / line_ratio_err[key]) ** 2
+        log_prob = np.log10(((10**line_ratio_obs[key] - 10**line_ratios_model[key]) / 10**line_ratio_err[key]) ** 2)
 
         # append to the list
         log_likelihoods.append(log_prob)
@@ -64,7 +64,7 @@ def log_likelihood_individual_line(metallicity, line_ratio_obs, line_ratio_err):
 
     return total_log_likelihood
 
-def log_posterior_individual_line(metallicity, line_ratio_obs, line_ratio_err):
+def log_posterior(metallicity, line_ratio_obs, line_ratio_err):
     """
     Calculate the log posterior for a given metallicity and observed line ratios
     with their uncertainties.
@@ -88,7 +88,7 @@ def log_posterior_individual_line(metallicity, line_ratio_obs, line_ratio_err):
         return -np.inf
     
     # calculate the log likelihood
-    log_likelihood = log_likelihood_individual_line(metallicity, line_ratio_obs, line_ratio_err)
+    total_log_likelihood = log_likelihood(metallicity, line_ratio_obs, line_ratio_err)
 
     # return the log posterior
-    return log_prior + log_likelihood
+    return log_prior + total_log_likelihood
