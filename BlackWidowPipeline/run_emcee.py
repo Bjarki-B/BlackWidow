@@ -63,3 +63,32 @@ def log_likelihood_individual_line(metallicity, line_ratio_obs, line_ratio_err):
     total_log_likelihood = -0.5*np.sum(log_likelihoods)
 
     return total_log_likelihood
+
+def log_posterior_individual_line(metallicity, line_ratio_obs, line_ratio_err):
+    """
+    Calculate the log posterior for a given metallicity and observed line ratios
+    with their uncertainties.
+    
+    Parameters
+    ----------
+    metallicity : float
+        The value of 12 + log(O/H).
+    line_ratios_obs : dict
+        Dictionary of observed line ratios. Keys must be consistent with those 
+        in scaling_relations_Curti2020.py
+    line_ratios_err : dict
+        Dictionary of uncertainties in the observed line ratios, same shape as 
+        line_ratios_obs.
+    """
+    # calculate the log prior
+    log_prior = uniform_log_metallicity_prior(metallicity)
+
+    # if the prior is not finite, return -inf
+    if not np.isfinite(log_prior):
+        return -np.inf
+    
+    # calculate the log likelihood
+    log_likelihood = log_likelihood_individual_line(metallicity, line_ratio_obs, line_ratio_err)
+
+    # return the log posterior
+    return log_prior + log_likelihood
