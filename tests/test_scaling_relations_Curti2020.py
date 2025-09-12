@@ -3,7 +3,7 @@ from BlackWidowPipeline import scaling_relations_Curti2020
 
 @pytest.mark.parametrize(
     "diagnostic, coeffs",
-    scaling_relations_Curti2020.coeffitients_dic.items()
+    scaling_relations_Curti2020.coefficients_dic.items()
 )
 def test_line_ratios_at_solar_metallicity(diagnostic, coeffs):
     metallicity = 8.69  # solar metallicity
