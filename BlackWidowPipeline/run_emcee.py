@@ -21,10 +21,45 @@ def uniform_log_metallicity_prior(metallicity):
     return -np.inf
 
 
-def log_likelihood(metallicity, line_ratios_obs, line_ratios_err):
+def log_likelihood_individual_line(metallicity, line_ratio_obs, line_ratio_err):
     """
-    Simple Gaussian likelihood function.
+    Simple Gaussian likelihood function for a given metallicity and observed 
+    line ratios with their uncertainties.
+
+    Parameters
+    ----------
+    metallicity : float
+        The value of 12 + log(O/H).
+    line_ratios_obs : dict
+        Dictionary of observed line ratios. Keys must be consistent with those 
+        in scaling_relations_Curti2020.py
+    line_ratios_err : dict
+        Dictionary of uncertainties in the observed line ratios, same shape as 
+        line_ratios_obs.
     """
-    # either loop over the line ratios or use a vectorized approach
-    model = scalrel.line_ratios(metallicity)
-    return -0.5 * np.sum(((line_ratios_obs - model) / line_ratios_err) ** 2)
+    # Get all line ratios from the model at the given metallicity
+    line_ratios_model = scalrel.line_ratios(metallicity)
+
+    # create a list to add log-likelihoods to for each line ratio
+    log_likelihoods = []
+
+    # iterate through the keys and calculate the log-likelihood
+    for key in line_ratio_obs.keys():
+        if key not in scalrel.coeffitients_dic.keys():
+            raise ValueError(f"Key {key} not found in scaling relations dictionary.")
+        if key not in line_ratio_err.keys():
+            raise ValueError(f"Key {key} not found in line ratio error dictionary.")
+        
+        # calculate the log-likelihood for each line ratio
+        log_prob = ((line_ratio_obs[key] - line_ratios_model[key]) / line_ratio_err[key]) ** 2
+
+        # append to the list
+        log_likelihoods.append(log_prob)
+
+    # convert to a numpy array
+    log_likelihoods = np.array(log_likelihoods)
+
+    # return the total log-likelihood
+    total_log_likelihood = -0.5*np.sum(log_likelihoods)
+
+    return total_log_likelihood
