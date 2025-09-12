@@ -5,7 +5,7 @@ import numpy as np
 #==================== define parameters ====================
 
 # Scaling factors from Curti+2020: Table 2
-coeffitients_dic = {
+coefficients_dic = {
     # for relating to Name Tags check Table 1
     "R2":   {"coeffs": [0.435, -1.362, -5.655, -4.851, -0.478, 0.736], "RMS": 0.11, "sigma": 0.10},
     "R3":   {"coeffs": [-0.277, -3.549, -3.593, -0.981],               "RMS": 0.09, "sigma": 0.07},
@@ -33,11 +33,11 @@ def line_ratios(metallicity: float) -> dict[str, float]:
     -------
     dict
     	Returns the line ratios as a dictionary with the line ratio 
-    	(dingastic) name as key and its value : {diagnostic: value}
+    	(diagnostic) name as key and its value : {diagnostic: value}
     """
     x = metallicity - 8.69
     results = {}
-    for name, data in coeffitients_dic.items():   # <-- FIXED HERE
+    for name, data in coefficients_dic.items():   # <-- FIXED HERE
         coeffs = data["coeffs"]
         results[name] = np.polyval(list(reversed(coeffs)), x)
     return results
