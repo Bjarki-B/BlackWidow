@@ -2,7 +2,7 @@
 
 ## How to create the BlackWidow conda environment
 To create a conda environment to run BlackWidow in, run the following:
-`conda create -f blackwidow_env.yml`
+`conda create -f blackwidow_env.yml -n blackwidow`
 or
 `mamba create -f blackwidow_env.yml`
 
