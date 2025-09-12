@@ -92,3 +92,52 @@ def log_posterior(metallicity, line_ratio_obs, line_ratio_err):
 
     # return the log posterior
     return log_prior + total_log_likelihood
+
+
+def run_mcmc(line_ratio_obs, line_ratio_err, n_walkers=50, n_steps=1000, n_burn=200, initial_metallicity=8.5):
+    """
+    Run the MCMC sampler to estimate the distribution of metallicities
+    given observed line ratios and their uncertainties.
+    
+    Parameters
+    ----------
+    line_ratios_obs : dict
+        Dictionary of observed line ratios. Keys must be consistent with those 
+        in scaling_relations_Curti2020.py
+    line_ratios_err : dict
+        Dictionary of uncertainties in the observed line ratios, same shape as 
+        line_ratios_obs.
+    n_walkers : int, optional
+        Number of MCMC walkers, by default 50.
+    n_steps : int, optional
+        Number of MCMC steps, by default 1000.
+    n_burn : int, optional
+        Number of burn-in steps to discard, by default 200.
+    initial_metallicity : float, optional
+        Initial guess for metallicity (12 + log(O/H)), by default 8.5, which is 
+        solar metallicity.
+        
+    Returns
+    -------
+    samples : ndarray
+        Array of shape (n_walkers * (n_steps - n_burn),) containing the 
+        posterior samples of metallicity.
+    """
+    # Initialize walkers in a small Gaussian ball around the initial guess
+    initial_pos = initial_metallicity + 1e-4 * np.random.randn(n_walkers)
+
+    # Set up the MCMC sampler
+    sampler = emcee.EnsembleSampler(
+        n_walkers, 
+        1,  # single parameter: metallicity
+        log_posterior, 
+        args=(line_ratio_obs, line_ratio_err)
+    )
+
+    # Run the MCMC sampler
+    sampler.run_mcmc(initial_pos, n_steps, progress=True)
+
+    # Discard burn-in samples and flatten the chain
+    samples = sampler.get_chain(discard=n_burn, flat=True)
+
+    return samples.flatten()
