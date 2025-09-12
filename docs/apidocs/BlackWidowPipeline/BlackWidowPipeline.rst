@@ -16,3 +16,4 @@ Submodules
    BlackWidowPipeline.calculate_extinction_correction
    BlackWidowPipeline.prepare_input
    BlackWidowPipeline.scaling_relations_Curti2020
+   BlackWidowPipeline.calculate_line_ratios
